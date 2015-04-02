@@ -1,15 +1,8 @@
 obj-m := GobiSerial.o
-KDIR := /lib/modules/$(shell uname -r)/build
-PWD := $(shell pwd)
-OUTPUTDIR=/lib/modules/`uname -r`/kernel/drivers/usb/serial/
+SRC := $(shell pwd)
 
-all: clean
-	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+all:
+        $(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules
 
-install: all
-	mkdir -p $(OUTPUTDIR)
-	cp -f GobiSerial.ko $(OUTPUTDIR)
-	depmod
-
-clean:
-	rm -rf *.o *~ core .depend .*.cmd *.ko *.mod.c .tmp_versions Module.* modules.order
+modules_install:
+        $(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install
